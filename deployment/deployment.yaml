@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-deployment
+  namespace: example
+  labels:
+    app: example-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: example-api
+  template:
+    metadata:
+      labels:
+        app: example-api
+    spec:
+      containers:
+        - name: example-api
+          # DOCKER_IMAGE_REGISTRY_URL
+          image: URL
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: example.config
+          command: ['node']
+          args: ['./dist/main.js']
+      # creds for private registry if so
+      imagePullSecrets:
+        - name: example.secret
